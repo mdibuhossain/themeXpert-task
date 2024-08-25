@@ -1,0 +1,90 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  fullName  String?
+  role      RoleType @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  stories      Story[]           @relation("AuthorStories")
+  interactions UserInteraction[]
+}
+
+model Story {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  startNodeId Int?     @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  author       User              @relation("AuthorStories", fields: [authorId], references: [id])
+  authorId     Int
+  nodes        Node[]            @relation("StoryNodes")
+  startNode    Node?             @relation("StartNode", fields: [startNodeId], references: [id])
+  interactions UserInteraction[]
+}
+
+model Node {
+  id        Int      @id @default(autoincrement())
+  storyId   Int
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  choices         Choice[]
+  UserInteraction UserInteraction[]
+  Choice          Choice[]          @relation("NextNode")
+  Story           Story[]           @relation("StartNode")
+  story           Story             @relation("StoryNodes", fields: [storyId], references: [id])
+}
+
+model Choice {
+  id         Int      @id @default(autoincrement())
+  text       String
+  popularity Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  nodeId     Int
+  nextNodeId Int?
+
+  // Relations
+  interactions UserInteraction[]
+  node         Node              @relation(fields: [nodeId], references: [id])
+  nextNode     Node?             @relation("NextNode", fields: [nextNodeId], references: [id])
+}
+
+model UserInteraction {
+  id        Int      @id @default(autoincrement())
+  timestamp DateTime @default(now())
+  timeSpent Int?
+
+  // Relations
+  user     User   @relation(fields: [userId], references: [id])
+  userId   Int
+  story    Story  @relation(fields: [storyId], references: [id])
+  storyId  Int
+  node     Node   @relation(fields: [nodeId], references: [id])
+  nodeId   Int
+  choice   Choice @relation(fields: [choiceId], references: [id])
+  choiceId Int
+}
+
+enum RoleType {
+  USER
+  ADMIN
+}
