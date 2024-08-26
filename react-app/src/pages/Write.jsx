@@ -6,9 +6,11 @@ function Write() {
   const { user } = useContext(AuthContext);
   const [story, setStory] = React.useState(null);
   const [option, setOption] = React.useState([]);
+  const [nodeId, setNodeId] = React.useState(null);
   const [showOptionForm, setShowOptionForm] = React.useState(false);
 
   console.log(story);
+  console.log(option);
 
   const handleToggleOptionForm = () => {
     setShowOptionForm(!showOptionForm);
@@ -43,6 +45,7 @@ function Write() {
             .then((res) => {
               if (res.status === 201) {
                 setStory(res.data.story);
+                setNodeId(res.data.story.startNodeId);
                 alert("Story created successfully");
               }
             })
@@ -69,7 +72,7 @@ function Write() {
         `${import.meta.env.VITE_BACKEND_URL}/choices`,
         {
           title: payload.title,
-          nodeId: story.startNode.id,
+          nodeId: nodeId,
           content: payload.content,
         },
         {
@@ -126,8 +129,22 @@ function Write() {
             Publish
           </button>
         )}
-        <form onSubmit={handleInitialStoryCreate} className="mt-3 space-y-3">
-          <div className="rounded-md shadow-sm -space-y-px">
+        <form
+          onSubmit={handleInitialStoryCreate}
+          className="mt-3 space-y-3"
+          onClick={() => {
+            if (story) {
+              setNodeId(story?.startNodeId);
+            }
+          }}
+        >
+          <div
+            className={`-space-y-px ${
+              story && nodeId && nodeId === story?.startNodeId
+                ? "shadow-md shadow-violet-500/60"
+                : "shadow-md"
+            }`}
+          >
             <div>
               <input
                 id="title"
@@ -174,7 +191,12 @@ function Write() {
               {option.map((choice) => (
                 <div
                   key={choice.id}
-                  className="mt-2 px-2 rounded-full bg-blue-200"
+                  className={`mt-2 px-2 py-2 rounded-full bg-gray-100 ${
+                    nodeId === choice?.nextNodeId
+                      ? "shadow-md shadow-violet-500/60"
+                      : "shadow-md"
+                  }`}
+                  onClick={() => setNodeId(choice.nextNodeId)}
                 >
                   <div className="font-semibold">{choice.title}</div>
                 </div>

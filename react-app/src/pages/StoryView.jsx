@@ -70,7 +70,7 @@ function StoryView() {
                     key={choice.id}
                     className={`bg-blue-100/30 shadow overflow-hidden rounded-full p-2 hover:shadow-green-400 cursor-pointer ${
                       choosenNode?.id === choice.nextNodeId &&
-                      "shadow-green-500"
+                      "shadow-green-600"
                     }`}
                     onClick={() => handleSwitchNode(choice.nextNodeId)}
                   >
@@ -125,7 +125,7 @@ const RemainingStoryView = ({ currentNode }) => {
               <div
                 key={choice.id}
                 className={`bg-blue-100/30 shadow overflow-hidden rounded-full p-2 hover:shadow-green-400 cursor-pointer ${
-                  choosenNode?.id === choice.nextNodeId && "shadow-green-500"
+                  choosenNode?.id === choice.nextNodeId && "shadow-green-600"
                 }`}
                 onClick={() => handleSwitchNode(choice.nextNodeId)}
               >
