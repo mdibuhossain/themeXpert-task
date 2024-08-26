@@ -7,5 +7,6 @@ const storyRouter = Router();
 storyRouter.post("/", authMiddleware, storyController.createStory);
 storyRouter.get("/", authMiddleware, storyController.getStories);
 storyRouter.get("/:sid", authMiddleware, storyController.getStory);
+storyRouter.put("/:sid/publish", authMiddleware, storyController.publishStory);
 
 export default storyRouter;

@@ -10,15 +10,18 @@ export class choiceController {
       if (!findNode) {
         return res.status(404).json({ errors: "Node not found" });
       }
+
+      const newNode = await prisma.node.create({
+        data: {
+          content,
+        },
+      });
+
       const newChoice = await prisma.choice.create({
         data: {
           title,
           nodeId: parseInt(nodeId),
-          nextNode: {
-            create: {
-              content,
-            },
-          },
+          nextNodeId: newNode.id,
         },
         include: {
           nextNode: true,

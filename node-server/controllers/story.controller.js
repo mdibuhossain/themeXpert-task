@@ -13,12 +13,16 @@ export class storyController {
       const newStory = await prisma.story.create({
         data: {
           title,
-          authorId: {
-            connect: { id: parseInt(authorId) },
+          authorId: parseInt(authorId),
+          startNodeId: parseInt(startNodeId),
+        },
+        include: {
+          startNode: {
+            include: {
+              choices: true,
+            },
           },
-          startNodeId: {
-            connect: { id: parseInt(startNodeId) },
-          },
+          interactions: true,
         },
       });
       return res
@@ -71,6 +75,30 @@ export class storyController {
         return res.status(404).json({ errors: "Story not found" });
       }
       return res.status(200).json({ story: findStory });
+    } catch (error) {
+      return res.status(500).json({ errors: error.message });
+    }
+  }
+
+  static async publishStory(req, res) {
+    try {
+      const { sid } = req.params;
+      const { published } = req.body;
+      const findStory = await prisma.story.findUnique({
+        where: { id: parseInt(sid) },
+      });
+      if (!findStory) {
+        return res.status(404).json({ errors: "Story not found" });
+      }
+      const updateStory = await prisma.story.update({
+        where: { id: parseInt(sid) },
+        data: {
+          published,
+        },
+      });
+      return res
+        .status(201)
+        .json({ message: "Story published successfully", story: updateStory });
     } catch (error) {
       return res.status(500).json({ errors: error.message });
     }

@@ -4,12 +4,6 @@ export class nodeController {
   static async createNode(req, res) {
     try {
       const { content } = req.body;
-      const findStory = await prisma.story.findUnique({
-        where: { id: parseInt(storyId) },
-      });
-      if (!findStory) {
-        return res.status(404).json({ errors: "Story not found" });
-      }
       const newNode = await prisma.node.create({
         data: {
           content,
