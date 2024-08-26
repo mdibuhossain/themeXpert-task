@@ -8,7 +8,7 @@ const Profile = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const payload = {
-      name: e.target.name.value,
+      fullName: e.target.name.value,
     };
     axios
       .put(`${import.meta.env.VITE_BACKEND_URL}/profile`, payload, {
@@ -32,10 +32,11 @@ const Profile = () => {
       </h2>
       <div>
         <p className="text-center text-xl font-semibold">
-          Welcome, <span className="text-lime-600 font-bold">{user.name}</span>
+          Welcome,{" "}
+          <span className="text-lime-600 font-bold">{user?.fullName}</span>
         </p>
-        <p className="text-center text-base font-normal">{user.email}</p>
-        <p className="text-center">
+        <p className="text-center text-sm font-normal italic">{user?.email}</p>
+        <p className="text-center mt-1">
           <span className="bg-indigo-300 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">
             {user?.role}
           </span>

@@ -2,16 +2,17 @@ import { useContext } from "react";
 import { AuthContext } from "../contexts/auth.context";
 import { NavLink } from "react-router-dom";
 
-const Login = () => {
-  const { login } = useContext(AuthContext);
+const Signup = () => {
+  const { register } = useContext(AuthContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const payload = {
+      fullName: e.target.fullName.value,
       email: e.target.email.value,
       password: e.target.password.value,
     };
-    login(payload);
+    register(payload);
   };
 
   return (
@@ -26,12 +27,23 @@ const Login = () => {
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <input
+                id="full-name"
+                name="fullName"
+                type="text"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Full Name"
+                required
+              />
+            </div>
+            <div>
+              <input
                 id="email-address"
                 name="email"
                 type="email"
                 autoComplete="email"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
+                required
               />
             </div>
             <div>
@@ -42,6 +54,7 @@ const Login = () => {
                 autoComplete="current-password"
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
+                required
               />
             </div>
           </div>
@@ -50,14 +63,21 @@ const Login = () => {
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Sign in
+              {/* {userLoading ? (
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-indigo-400"></div>
+              ) : (
+                "Sign in"
+              )} */}
+              Register
             </button>
           </div>
           <div>
             {/* signup */}
             <p className="text-sm">
-              Don&apos;t have an account?{" "}
-              <NavLink to="/register" className="text-violet-500">Register</NavLink>
+              Already have an account?{" "}
+              <NavLink to="/login" className="text-violet-500">
+                Login
+              </NavLink>
             </p>
           </div>
         </form>
@@ -66,4 +86,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

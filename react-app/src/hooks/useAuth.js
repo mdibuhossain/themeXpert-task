@@ -12,6 +12,25 @@ const useAuth = () => {
     state?.from ? history(state?.from?.pathname) : history("/");
   }, [history, location]);
 
+  const register = (payload) => {
+    axios
+      .post(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, payload, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 201) {
+          alert("Registered successfully");
+          history("/login");
+        } else {
+          alert("Something went wrong");
+        }
+      })
+      .catch((err) => {
+        alert(err.response.data.errors);
+      });
+  };
+
   const login = (payload) => {
     axios
       .post(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, payload, {
@@ -64,10 +83,12 @@ const useAuth = () => {
 
   return {
     user,
-    setUser,
     login,
-    checkProfile,
     logout,
+    history,
+    setUser,
+    register,
+    checkProfile,
   };
 };
 
