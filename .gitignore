@@ -30,7 +30,3 @@
 
 # typescript
 /**/*.tsbuildinfo
-
-
-/**/*.env.local
-/**/*.env
