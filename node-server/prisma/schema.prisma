@@ -27,21 +27,21 @@ model Story {
   title       String
   description String?
   startNodeId Int?     @unique
+  published   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   // Relations
   author       User              @relation("AuthorStories", fields: [authorId], references: [id])
   authorId     Int
-  nodes        Node[]            @relation("StoryNodes")
   startNode    Node?             @relation("StartNode", fields: [startNodeId], references: [id])
   interactions UserInteraction[]
 }
 
 model Node {
   id        Int      @id @default(autoincrement())
-  storyId   Int
   content   String
+  isEnding  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -50,12 +50,11 @@ model Node {
   UserInteraction UserInteraction[]
   Choice          Choice[]          @relation("NextNode")
   Story           Story[]           @relation("StartNode")
-  story           Story             @relation("StoryNodes", fields: [storyId], references: [id])
 }
 
 model Choice {
   id         Int      @id @default(autoincrement())
-  text       String
+  title      String
   popularity Int      @default(0)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

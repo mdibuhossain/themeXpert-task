@@ -8,6 +8,8 @@ import authRouter from "./routes/auth.router.js";
 import userRouter from "./routes/users.router.js";
 import profileRouter from "./routes/profile.router.js";
 import storyRouter from "./routes/story.router.js";
+import nodeRouter from "./routes/node.router.js";
+import choiceRouter from "./routes/choice.router.js";
 
 dotenv.config();
 const app = express();
@@ -27,7 +29,9 @@ app.use(formData.union());
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
+app.use("/api/nodes", nodeRouter);
 app.use("/api/stories", storyRouter);
+app.use("/api/choices", choiceRouter);
 app.use("/api/profile", profileRouter);
 
 app.listen(process.env.PORT || 5000, () => {
