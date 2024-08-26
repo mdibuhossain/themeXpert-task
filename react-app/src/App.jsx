@@ -8,6 +8,7 @@ import AdminRoute from "./routes/AdminRoute";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Write from "./pages/Write";
+import StoryView from "./pages/StoryView";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           >
             <Route index element={<Home />} />
             <Route path="/write-story" element={<Write />} />
+            <Route path="/stories/:id" element={<StoryView />} />
             <Route path="/profile" element={<Profile />} />
             <Route element={<AdminRoute />}></Route>
           </Route>

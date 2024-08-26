@@ -36,9 +36,8 @@ export class storyController {
   static async getStories(req, res) {
     try {
       const stories = await prisma.story.findMany({
-        select: {
-          id: true,
-          title: true,
+        where: { published: true },
+        include: {
           author: {
             select: {
               id: true,
@@ -47,7 +46,6 @@ export class storyController {
             },
           },
         },
-        where: { published: true },
       });
       return res.status(200).json({ stories });
     } catch (error) {
@@ -68,7 +66,11 @@ export class storyController {
               fullName: true,
             },
           },
-          startNode: true,
+          startNode: {
+            include: {
+              choices: true,
+            },
+          },
         },
       });
       if (!findStory) {
